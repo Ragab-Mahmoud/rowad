@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_confirmation_wizard,pos_margin_sale.sale_confirmation_wizard,model_sale_confirmation_wizard,base.group_user,1,1,1,1
+access_wizard_margin_product,pos_margin_sale.wizard_margin_product,model_wizard_margin_product,base.group_user,1,1,1,1

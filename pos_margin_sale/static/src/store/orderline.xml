@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension">
+        <xpath expr="//li[contains(@class, 'orderline')]" position="attributes">
+            <attribute name="t-attf-class">
+                {{ line.comboParent ? 'border-start border-3 ms-4' : '' }}
+                {{ line.isLessMinimumSalePrice ? 'text-danger' : '' }}
+            </attribute>
+        </xpath>
+        <xpath expr="//li[contains(@class, 'orderline')]/ul[hasclass('info-list')]/t[@t-slot='default']" position="before">
+            <li t-if="line.isLessMinimumSalePrice">
+                <strong>*The price of this product is less than minimum sale price <t t-esc="line.minimumSalePriceWithTax"/></strong> 
+            </li>
+        </xpath>
+    </t>
+</templates>

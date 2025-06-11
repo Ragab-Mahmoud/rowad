@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_margin_product_view_form" model="ir.ui.view">
+        <field name="name">wizard.margin.product.view.form</field>
+        <field name="model">wizard.margin.product</field>
+        <field name="arch" type="xml">
+            <form string="Assign Margin">
+                <sheet>
+                    <group>
+                        <field name="product_template_ids" widget="many2many_tags" invisible="not is_product"/>
+                        <field name="product_ids" widget="many2many_tags"  invisible="is_product"/>
+                        <label for="margin"/>
+                        <div class="d-inline-block" >
+                          <field name="margin" widget="float" class="oe_inline o_input_6ch"/>
+                          <span class="oe_grey"> %</span>
+                        </div>
+                        <field name="is_product" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Assign" name="action_assing_margin" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel" class="btn btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+
+</odoo>

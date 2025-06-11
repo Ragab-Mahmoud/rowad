@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_template_inherit_pos_margin_sale" model="ir.ui.view">
+        <field name="name">product.template.inherit.pos.margin.sale</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="list_price" position="replace">
+                <field name="list_price" decoration-danger="list_price &lt; minimum_sale_price" widget="monetary"/>
+
+            </field>
+            <field name="categ_id" position="before">
+                <label for="margin_sale"/>
+                <div class="d-inline-block" >
+                  <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
+                  <span class="oe_grey"> %</span>
+                </div>
+                <field name="minimum_sale_price" widget="monetary"/>
+                <field name="minimum_sale_price_with_tax" widget="monetary" />
+
+            </field>
+        </field>
+    </record>
+
+    <record id="product_template_margin_sale_action_server" model="ir.actions.server">
+        <field name="name">Update margin sale</field>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="binding_model_id" ref="model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_assign_margin()
+        </field>
+    </record>
+
+</odoo>

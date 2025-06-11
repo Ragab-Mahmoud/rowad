@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="product_category_form_view_inherit_margin_sale" model="ir.ui.view">
+        <field name="name">product.category.form.view.inherit.margin.sale</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="stock_account.view_category_property_form_stock"/>
+        <field name="arch" type="xml">
+            <field name="property_cost_method" position="before">
+                <label for="margin_sale"/>
+                <div class="d-inline-block" >
+                  <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
+                  <span class="oe_grey"> %</span>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- <record id="product_normal_form_view_inherit_margin_sale" model="ir.ui.view">
+        <field name="name">product.normal.form.view.inherit.margin.sale</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="lst_price" position="attributes">
+                <attribute name="decoration-danger">is_less_minimum_sale</attribute>
+            </field>
+            <field name="default_code" position="before">
+                <label for="margin_sale"/>
+                <div class="d-inline-block" >
+                  <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
+                  <span class="oe_grey"> %</span>
+                </div>
+                <field name="minimum_sale_price" widget="monetary"/>
+                <field name="is_less_minimum_sale" invisible="1"/>
+            </field>
+        </field>
+    </record> -->
+<!-- 
+    <record id="product_template_form_view_inherit_pos_margin_sale" model="ir.ui.view">
+        <field name="name">product.template.form.view.inherit.pos.margin.sale</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="standard_price" position="after">
+                <label for="margin_sale"/>
+                <div class="d-inline-block" >
+                  <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
+                  <span class="oe_grey"> %</span>
+                </div>
+                <field name="minimum_sale_price" />
+                <field name="is_less_minimum_sale" invisible="1"/>
+            </field>
+        </field>
+    </record> -->
+
+    <record id="product_template_inherit_pos_margin_sale" model="ir.ui.view">
+        <field name="name">product.template.inherit.pos.margin.sale</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="list_price" position="replace">
+                <field name="list_price" decoration-danger="list_price &lt; minimum_sale_price" widget="monetary"/>
+            </field>
+            <field name="categ_id" position="before">
+                <label for="margin_sale" invisible="product_variant_count &gt; 1 and not is_product_variant"/>
+                <div class="d-inline-block" invisible="product_variant_count &gt; 1 and not is_product_variant">
+                  <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
+                  <span class="oe_grey"> %</span>
+                </div>
+                <field name="is_product_variant" invisible="1"/>
+                <!-- <field name="minimum_sale_price" widget="monetary" invisible="product_variant_count &gt; 1 and not is_product_variant"/> -->
+
+                <label for="minimum_sale_price" invisible="product_variant_count &gt; 1 and not is_product_variant"/>
+                <div class="row" invisible="product_variant_count &gt; 1 and not is_product_variant">
+                    <div class="col-md-6">
+                        <field name="minimum_sale_price" widget="monetary"/>
+                    </div>
+                    <div class="col-md-2">
+                        <field name="minimum_sale_price_with_tax" widget="monetary" />
+                    </div>
+                    <div class="col-md-4">
+                        <span>Incl. Tax</span>
+                    </div>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_variant_easy_edit_view_margin_sale" model="ir.ui.view">
+        <field name="name">product.variant.easy.edit.view.margin.sale</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <field name="lst_price" position="replace">
+                <field name="lst_price" decoration-danger="is_less_minimum_sale" widget="monetary" />
+            </field>
+            <group name="pricing" position="inside">
+                <label for="margin_sale" />
+                <div class="d-inline-block" >
+                  <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
+                  <span class="oe_grey"> %</span>
+                </div>
+                <field name="is_product_variant" invisible="1"/>
+                <label for="minimum_sale_price" invisible="product_variant_count &gt; 1 and not is_product_variant"/>
+                <div class="row" invisible="product_variant_count &gt; 1 and not is_product_variant">
+                    <div class="col-md-6">
+                        <field name="minimum_sale_price" widget="monetary"/>
+                    </div>
+                    <div class="col-md-2">
+                        <field name="minimum_sale_price_with_tax" widget="monetary" />
+                    </div>
+                    <div class="col-md-4">
+                        <span>Incl. Tax</span>
+                    </div>
+                </div>
+                <!-- <field name="minimum_sale_price" widget="monetary"/> -->
+                <field name="is_less_minimum_sale" invisible="1" />
+            </group>
+        </field>
+    </record>
+
+    <record id="product_template_margin_sale_action_server" model="ir.actions.server">
+        <field name="name">Update margin sale</field>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="binding_model_id" ref="model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_assign_margin()
+        </field>
+    </record>
+
+    <record id="product_product_margin_sale_action_server" model="ir.actions.server">
+        <field name="name">Update margin sale</field>
+        <field name="model_id" ref="model_product_product"/>
+        <field name="binding_model_id" ref="model_product_product"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_assign_margin()
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template_custom_pos_advance_cash_payment_extended" inherit_id="point_of_sale.template" xml:space="preserve">
+
+
+	<t t-name="PartnerListScreen" t-inherit="point_of_sale.PartnerListScreen" t-inherit-mode="extension" owl="1">
+		
+		<xpath expr="//tbody[hasclass('partner-list-contents')]" position="replace">
+			<tbody class="partner-list-contents">
+                <t t-foreach="partners" t-as="partner"
+                    t-key="partner.id">
+                    <PartnerLine partner="partner"
+                                selectedPartner="state.selectedPartner"
+                                detailIsShown="state.detailIsShown"
+                                isBalanceDisplayed="isBalanceDisplayed"
+                                onClickEdit.bind="editPartner"
+                                onClickPayment.bind="addPayment"
+                                onClickPartner.bind="clickPartner"/>
+                </t>
+            </tbody>
+		</xpath>
+
+		<xpath expr="//t[@t-if='state.detailIsShown']" position="replace">
+			<t t-if="state.detailIsShown">
+                <PartnerDetailsEdit 
+                    t-props="state.editModeProps" 
+                    saveChanges.bind="saveChanges" 
+                    onPaymentClick.bind="addPayment" 
+                    imperativeHandle="partnerEditor" />
+            </t>
+        </xpath>
+
+	</t>
+
+	<t t-extend="PartnerLine" t-inherit="point_of_sale.PartnerLine" t-inherit-mode="extension" owl="1">
+	    <xpath expr="//button[hasclass('edit-partner-button')]" position="after">
+	    	<br/>
+	    	<br/>
+	        <button class="payment-partner-button btn btn-light border" t-on-click.stop="() => props.onClickPayment(props.partner)">Add Payment</button>
+		</xpath>
+	</t>
+
+	<t t-extend="PartnerDetailsEdit" t-inherit="point_of_sale.PartnerDetailsEdit" t-inherit-mode="extension" owl="1">
+		<xpath expr="//div[hasclass('partner-details-box')]" position="before">
+			<div class='payment-button' style="margin-top: 15px;width: 20%;" >
+				<div class="button add-payment" style="background-color: #875a7b; color: #fff; padding: 10px 10px; font-size: 20px; margin-right:40px; cursor: pointer; border-radius: 3px;" t-on-click.stop="() => props.onPaymentClick(props.partner)">
+					<i class='fa fa-sign-in'/>  Add Payment
+				</div>
+			</div>
+		</xpath>
+	</t>
+
+	<t t-name="pos_advance_cash_payment.AddPaymentPopupWidget" owl="1">
+        <div class="popup">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Payment</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="body traceback" style="font-family: 'Lato-Reg';">
+                    <p style="color: #875a7b;text-align: center;font-size: 20px;">Enter Details Here</p>
+					<table class="table table-sm" style="width: 100%;font-size:20px;">
+						<tr>
+							<td>Payment Type:</td>
+							<td>
+								<select id="payment_type" class='detail' name='type' style="height: 42px;width: 60%;margin: 10px;font-size: 16px;">
+									<t t-foreach='pos.journals' t-as='jrn' t-key="jrn.id">
+										<option t-att-value='jrn.id'> 
+											<t t-esc='jrn.name'/>
+										</option>
+									</t>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Amount: </td>
+							<td>
+								<input id ="entered_amount" type="text" class="input-field" name="code" style="height: 35px; width: 60%;margin-left: 9px;height: 42px;"></input>
+							</td>
+						</tr>
+					</table>
+                </div>
+            </div>
+
+            <footer class="footer modal-footer">
+
+            	<button class="button btn btn-lg btn-primary"
+                    t-on-click="addPayment"
+                    >
+                    Apply
+                </button>
+
+				<button class="button cancel btn btn-lg btn-primary" id="cancel_coupon_code" t-on-click="cancel">
+					Cancel
+				</button>
+
+            </footer>
+
+        </div>
+    </t>
+</templates>

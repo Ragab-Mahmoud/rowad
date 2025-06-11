@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--        Salon approved mail template-->
+        <record id="mail_template_salon_approved" model="mail.template">
+            <field name="name">Salon Approved E-mail</field>
+            <field name="email_from">{{ object.company_id and object.company_id.email or '' }}</field>
+            <field name="subject">مبروك {{ object.name }}</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="lang">{{ object.language_id }}</field>
+            <field name="model_id" ref="salon_management.model_salon_booking" />
+            <field name="auto_delete" eval="True" />
+            <field name="body_html" type="html">
+                <div>
+                    <p>عزيزى <t t-out="object.name" />,<br />
+                    تم تسجيل حجزك <t t-out="object.company_id.name" />, شكرًا لاختيارك <br /><br /></p>
+                    مع تحياتي,<br />
+                    <t t-out="object.company_id.name" />
+                </div>
+            </field>
+        </record>
+        <!--        Salon rejecting mail template-->
+        <record id="mail_template_salon_rejected" model="mail.template">
+            <field name="name">Salon Rejected E-mail</field>
+            <field name="email_from">{{ object.company_id and object.company_id.email or '' }}</field>
+            <field name="subject">نأسف {{ object.name }}</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="lang">{{ object.language_id }}</field>
+            <field name="model_id" ref="salon_management.model_salon_booking" />
+            <field name="auto_delete" eval="True" />
+            <field name="body_html" type="html">
+                <div>
+                    <p>عزيزى <t t-out="object.name" />,<br />
+                   لكن تم رفض حجزك <t t-out="object.company_id.name" />,شكرًا لاختيارك<br />
+                    لا توجد مقاعد متاحة في الوقت الذي اخترته.<br />
+                   حظًا أفضل في المرة القادمة.<br /><br /></p>
+                   مع تحياتي,<br />
+                    <t t-out="object.company_id.name" />
+                </div>
+            </field>
+       </record>
+    </data>
+</odoo>

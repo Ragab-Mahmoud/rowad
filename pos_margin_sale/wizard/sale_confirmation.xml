@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_confirmation_wizard_view_form" model="ir.ui.view">
+        <field name="name">sale.confirmation.wizard.view.form</field>
+        <field name="model">sale.confirmation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirmation">
+                <sheet>
+                    <field name="message" readonly="1"/>
+                </sheet>
+                <footer>
+                    <button string="Confirm" name="action_confirm" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel" class="btn btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
