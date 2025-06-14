@@ -44,21 +44,34 @@ class ResConfigSettings(models.TransientModel):
                                          default=return_holidays,
                                          help="Holidays of salon")
 
-    def execute(self):
-        """Update boolean fields of holiday and chair"""
-        book_chair = []
-        for chairs in self.salon_booking_chair_ids:
-            book_chair.append(chairs.id)
-        for chair in self.env['salon.chair'].search([]):
-            if chair.id in book_chair:
-                chair.active_booking_chairs = True
-            else:
-                chair.active_booking_chairs = False
-        holiday = []
-        for days in self.salon_holiday_ids:
-            holiday.append(days.id)
-        for records in self.env['salon.holiday'].search([]):
-            if records.id in holiday:
-                records.holiday = True
-            else:
-                records.holiday = False
+    def set_values(self):
+        super().set_values()
+
+        # Update chairs
+        all_chairs = self.env['salon.chair'].search([])
+        all_chairs.write({'active_booking_chairs': False})
+        self.salon_booking_chair_ids.write({'active_booking_chairs': True})
+
+        # Update holidays
+        all_holidays = self.env['salon.holiday'].search([])
+        all_holidays.write({'holiday': False})
+        self.salon_holiday_ids.write({'holiday': True})
+    #
+    # def execute(self):
+    #     """Update boolean fields of holiday and chair"""
+    #     book_chair = []
+    #     for chairs in self.salon_booking_chair_ids:
+    #         book_chair.append(chairs.id)
+    #     for chair in self.env['salon.chair'].search([]):
+    #         if chair.id in book_chair:
+    #             chair.active_booking_chairs = True
+    #         else:
+    #             chair.active_booking_chairs = False
+    #     holiday = []
+    #     for days in self.salon_holiday_ids:
+    #         holiday.append(days.id)
+    #     for records in self.env['salon.holiday'].search([]):
+    #         if records.id in holiday:
+    #             records.holiday = True
+    #         else:
+    #             records.holiday = False
